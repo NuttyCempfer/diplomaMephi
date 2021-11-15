@@ -1,4 +1,4 @@
-all: main.c mainmenu.c mainmenu.h DetMatrix2.c determ.h MultiMatrix.c multy.h parser.c parser.h main
+all: main.c mainmenu.c mainmenu.h DetMatrix2.c determ.h MultiMatrix.c multy.h parser.c parser.h matr.h main
 
 clean:
 	rm -rf main.o mainmenu.o DetMatrix2.o MultiMatrix.o parser.o main
