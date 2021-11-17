@@ -2,10 +2,10 @@
 #include "multy.h"
 #include "determ.h"
 #include "matr.h"
+#include "mainmenu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mainmenu.h"
 
 int main(){
 	int item;
@@ -37,9 +37,9 @@ int main(){
     			//âîçìîæíî ïîä c íàäî ïàìÿòü âûäåëèòü
     			c=MultiplyMatr(a,b);
     			PrintMatr(c);
-    			freeMatr(a);
-    			freeMatr(b);
-    			freeMatr(c);
+    			FreeMatr(a);
+    			FreeMatr(b);
+    			FreeMatr(c);
 				break;
 			case 3:
 				printf("Item3 \n");
