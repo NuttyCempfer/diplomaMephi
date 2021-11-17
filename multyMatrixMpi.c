@@ -1,4 +1,4 @@
-#include "multy.h"
+#include "multyMpi.h"
 #include "matr.h"
 #include <stdio.h>
 #include <stdlib.h>

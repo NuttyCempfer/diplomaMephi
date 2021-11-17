@@ -7,4 +7,7 @@ struct Matr{
     double ** A;
 };
 
+struct Matr InsertMatr();
+void FreeMatr(struct Matr a);
+void PrintMatr(struct Matr a);
 #endif
