@@ -4,7 +4,7 @@
 struct Matr{
     int N;
     int M;
-    double ** A;
+    double * A;
 };
 
 struct Matr InsertMatr();

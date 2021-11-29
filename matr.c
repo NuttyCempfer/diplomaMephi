@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Matr InsertMatr(){
+/*struct Matr InsertMatr(){
     struct Matr a;
     int i,j,x,y;
     printf("Insert number of line\n");
@@ -35,12 +35,9 @@ struct Matr InsertMatr(){
             a.A[i][j]=rand()%1000/100.;
     }
     return a;
-};
+};*/
 
 void FreeMatr(struct Matr a){
-    int i;
-    for(i=0;i<a.N;i++)
-        free(a.A[i]);
     free(a.A);
 }
 
@@ -52,7 +49,7 @@ void PrintMatr(struct Matr a){
     }
     for(i=0;i<a.N;i++){
         for(j=0;j<a.M;j++)
-            printf("%f ",a.A[i][j]);
+            printf("%f ",a.A[i*a.M+j]);
         printf("\n");
     }
     printf("\n");

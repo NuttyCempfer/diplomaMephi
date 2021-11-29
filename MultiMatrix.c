@@ -9,13 +9,13 @@ struct Matr MultiplyMatr(struct Matr a, struct Matr b){
     struct Matr c;
     c.N=a.N;
     c.M=b.M;
-    if(a.N!=b.M){
+    if(a.M!=b.N){
         c.N=0;
         c.M=0;
         c.A=NULL;
         return c;
     }
-    c.A=malloc(a.N*sizeof(double *));
+    c.A=malloc(c.N*c.M*sizeof(double));
     if(c.A==NULL){
         c.N=0;
         c.M=0;
@@ -23,22 +23,12 @@ struct Matr MultiplyMatr(struct Matr a, struct Matr b){
         return c;
     }
 
-    for(i=0;i<a.N;i++){
-        c.A[i]=malloc(b.M*sizeof(double));
-        if(c.A[i]==NULL){
-            c.N=i;
-            FreeMatr(a);
-            c.N=0;
-            c.M=0;
-            c.A=NULL;
-            return c;
-        }
-    }
     for(i=0;i<c.N; i++){
         for(j=0; j<c.M; j++){
-            c.A[i][j]=0;
-            for(k=0; k<c.N; k++)
-                c.A[i][j]+=a.A[i][k]*b.A[k][j];
+            c.A[i*c.M+j]=0;
+            for(k=0; k<a.M; k++){
+                c.A[i*c.M+j]+=a.A[i*a.M+k]*b.A[k*b.M+j];
+			}
         }
     }
     return c;

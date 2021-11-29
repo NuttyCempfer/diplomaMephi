@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "parser.h"
+#include "matr.h"
 
 void FreeMemory (struct massiveSect * MS){
 	int i,j;
@@ -164,57 +165,57 @@ int WriteFile(FILE * wpars, struct massiveSect * MS){
 
 
 int TypeDataMatrix(char *nameSect, char *nameMatr, char *nameSize,
-					struct massiveSect * S, int *pn, int *pm, double ** pa){
+					struct massiveSect * S, struct Matr * a){
 	int nsect, nmatr, nsize,l;
 	char *p, *q;
 	double *tmp, k;
+	if(a==NULL)
+		return 5;
 	for(nsect=0; nsect<S->n && strcmp(S->sects[nsect].name,nameSect); nsect++);
 	if(nsect==S->n)
 		return 1;
 	for(nmatr=0; nmatr<S->sects[nsect].n && strcmp(S->sects[nsect].set[nmatr].key, nameMatr ); nmatr++);
 	if(nmatr==S->sects[nsect].n)
 		return 2;
+	
 	for(nsize=0; nsize<S->sects[nsect].n && strcmp(S->sects[nsect].set[nsize].key, nameSize ); nsize++);
 	if(nsize==S->sects[nsect].n)
 		return 3;
-	if(sscanf(S->sects[nsect].set[nsize].value,"%d",pm)!=1)
+	
+	if(sscanf(S->sects[nsect].set[nsize].value,"%d",&a->M)!=1)
 		return 6;
+	
 	if(S->sects[nsect].set[nmatr].value[0]!='(')
 		return 6;
+	
 	if((p=strchr(S->sects[nsect].set[nmatr].value,')'))==NULL)
 		return 6;
+	
 	if(strlen(p)!= 1)
 		return 6;
-	*pa=NULL;
+	a->A=NULL;
 	l=0;
 	p=S->sects[nsect].set[nmatr].value;
 	while(*p!=')'){
 		k=strtod(p+1,&q);
 		l++;
 		if(p+1==q || *q!=',' && *q!=')'){
-			free(*pa);
+			FreeMatr(*a);
 			return 6;
 		}
 		p=q;
-		if((tmp=realloc(*pa,sizeof(double)*l))==NULL){
-			free(*pa);
+		if((tmp=realloc(a->A,sizeof(double)*l))==NULL){
+			FreeMatr(*a);
 			return 6;
 		}
-		*pa=tmp;
+		a->A=tmp;
 		tmp[l-1]=k;
 	}
-	if(l%*pm!=0){
-		free(*pa);
+	if(l%a->M!=0){
+		FreeMatr(*a);
 		return 4;
 	}
-	*pn=l/(*pm);
-	
-
-	/*
-	 Распарсить размер матрицы.
-	 Распарсить саму матрицу.
-	 
-	 */
+	a->N=l/(a->M);
 	return 0;
 }
 /*

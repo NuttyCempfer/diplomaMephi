@@ -5,8 +5,8 @@
 
 char * textmenu[]={
 	"0 - Exit",
-	"1 - Item1",
-	"2 - Item2",
+	"1 - Determinant", 
+	"2 - Multiply",
 	"3 - Item3",
 	"4 - Item4",
 	"5 - Item5"

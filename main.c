@@ -6,37 +6,82 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define NAMELEN 100
 
-int main(){
+int main(int argc, char * argv[]){
 	int item;
 	int i, j, m,n, k;
 	double *matr;
 	FILE *pars, *wpars;
-	char * file_content,* fileIn,* fileOut;
+	char * file_content,* fileIn=argv[1],* fileOut;
+	char nameSect[NAMELEN], nameMatr[NAMELEN], nameSize[NAMELEN];
 	struct massiveSect * MS;
     struct Matr a, b, c;
+	if((pars=fopen(fileIn, "r"))==NULL)
+	{
+		printf("Не удалось открыть файл");
+		return 1;
+	}
+	//if((wpars=fopen(fileOut,"w"))==NULL)
+	//{
+	//	printf("Не удалось открыть файл на запись \n");
+	//	fclose(pars);
+	//	return 1;
+	//}
+	MS=OpenFile(pars);
+	fclose(pars);
+	//printSects(MS);
+	//WriteFile(wpars, MS);
+	//fclose(wpars);
 	while (item=getMenuItem(textmenu,N)){
 		switch(item){
 			case -1:
-				printf("Input/outpet error! \n");
+				printf("Input/output error! \n");
 				break;
 			case 1:
-				printf("Item1 \n");
-    			a=InsertMatr(a);
-   				PrintMatr(a);
+				printf("Determinant \n");
+				printf("Input name sector matr1 \n");
+				scanf("%s",nameSect);
+				printf("Input name matrix matr1 \n");
+				scanf("%s",nameMatr);
+				printf("Input name size matr1 \n");
+				scanf("%s",nameSize);
+				i=TypeDataMatrix(nameSect,nameMatr,nameSize,MS,&a);
+				printf("%d \n",i);
+				printf("n=%d m=%d \n",a.N,a.M);
+				PrintMatr(a);
     			printf("det= %f\n",DetMatr(a));
     			FreeMatr(a);
 				break;
 			case 2:
-				printf("Item2 \n");
-    			srand(time(NULL));
-    			a=InsertMatr();
-    			b=InsertMatr();
-    			PrintMatr(a);
-    			PrintMatr(b);
-    			//âîçìîæíî ïîä c íàäî ïàìÿòü âûäåëèòü
+				printf("Multiply \n");
+    			
+				printf("Input name sector matr1 \n");
+				scanf("%s",nameSect);
+				printf("Input name matrix matr1 \n");
+				scanf("%s",nameMatr);
+				printf("Input name size matr1 \n");
+				scanf("%s",nameSize);
+				i=TypeDataMatrix(nameSect,nameMatr,nameSize,MS,&a);
+				printf("%d \n",i);
+				printf("n=%d m=%d \n",a.N,a.M);			
+				PrintMatr(a);
+
+				printf("Input name sector matr2 \n");
+				scanf("%s",nameSect);
+				printf("Input name matrix matr2 \n");
+				scanf("%s",nameMatr);
+				printf("Input name size matr2 \n");
+				scanf("%s",nameSize);
+				i=TypeDataMatrix(nameSect,nameMatr,nameSize,MS,&b);
+				printf("%d \n",i);
+				printf("n=%d m=%d \n",b.N,b.M);
+				PrintMatr(b);
     			c=MultiplyMatr(a,b);
-    			PrintMatr(c);
+				printf("n=%d m=%d \n",c.N,c.M);
+
+
+				PrintMatr(c);
     			FreeMatr(a);
     			FreeMatr(b);
     			FreeMatr(c);
@@ -48,36 +93,11 @@ int main(){
 				printf("Item4 \n");
 				break;
 			case 5:
-				printf("Item5 \n");
-				if((pars=fopen(fileIn, "r"))==NULL)
-				{
-					printf("Не удалось открыть файл");
-					return 1;
-				}
-				if((wpars=fopen(fileOut,"w"))==NULL)
-				{
-					printf("Не удалось открыть файл на запись \n");
-					fclose(pars);
-					return 1;
-				}
-				MS=OpenFile(pars);
-				fclose(pars);
-				//printSects(MS);
-				WriteFile(wpars, MS);
-				fclose(wpars);
-				i=TypeDataMatrix("multiply","matrix2","size2",MS,&n,&m, &matr);
-				printf("%d \n",i);
-				printf("n=%d m=%d \n",n,m);
-				for(i=0; i<n;i++){
-					for(j=0; j<m; j++)
-						printf("%f ",matr[i*m+j]);
-					printf("\n");
-				}
-				free(matr);
-				FreeMemory(MS);
+				printf("Save progress in file \n");
 				break;
 
 		}
 	}
+	FreeMemory(MS);
 	return 0;
 }

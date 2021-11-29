@@ -1,5 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include "matr.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,6 +25,6 @@ void FreeMemory (struct massiveSect *);
 struct massiveSect * OpenFile(FILE *);
 void printSects(struct massiveSect *); 
 int WriteFile(FILE *, struct massiveSect *);
-int TypeDataMatrix(char *, char *, char *, struct massiveSect *, int *, int *, double **);
+int TypeDataMatrix(char *, char *, char *, struct massiveSect *, struct Matr *);
 
 #endif

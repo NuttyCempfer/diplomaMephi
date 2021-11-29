@@ -33,7 +33,7 @@ double DetMatr(struct Matr a){
         b[i]=i+1;
     while(neg!=0){
         for(det=1, j=0; j<a.N; j++)
-            det*=a.A[j][b[j]-1];
+            det*=a.A[j*a.N+b[j]-1];
         det*=neg;
         neg*=PermutationMatr(b,a.N);
         sum+=det;
