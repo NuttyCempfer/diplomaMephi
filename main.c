@@ -11,93 +11,111 @@
 int main(int argc, char * argv[]){
 	int item;
 	int i, j, m,n, k;
-	double *matr;
+	double *matr, det;
 	FILE *pars, *wpars;
-	char * file_content,* fileIn=argv[1],* fileOut;
+	char * file_content,* fileIn,* fileOut;
 	char nameSect[NAMELEN], nameMatr[NAMELEN], nameSize[NAMELEN];
 	struct massiveSect * MS;
     struct Matr a, b, c;
+	if(argc==1 || argc>3){
+		printf("Программа требует параметров \n");
+		printf("Первый параметр - имя конфигурационного файла \n");
+		printf("Второй параметр - имя файла вывода \n");
+		printf("В случае отсутствия второго параметра - производится вывод на экран \n");
+		return 1;
+	}
+	fileIn=argv[1];
+	if(argc==3)
+		fileOut=argv[2];
+	else
+		fileOut=NULL;
 	if((pars=fopen(fileIn, "r"))==NULL)
 	{
 		printf("Не удалось открыть файл");
 		return 1;
 	}
-	//if((wpars=fopen(fileOut,"w"))==NULL)
-	//{
-	//	printf("Не удалось открыть файл на запись \n");
-	//	fclose(pars);
-	//	return 1;
-	//}
+	if(fileOut)
+		if((wpars=fopen(fileOut,"w"))==NULL)
+		{
+			printf("Не удалось открыть файл на запись \n");
+			fclose(pars);
+			return 1;
+		}
 	MS=OpenFile(pars);
 	fclose(pars);
 	//printSects(MS);
 	//WriteFile(wpars, MS);
-	//fclose(wpars);
 	while (item=getMenuItem(textmenu,N)){
 		switch(item){
 			case -1:
 				printf("Input/output error! \n");
 				break;
 			case 1:
-				printf("Determinant \n");
-				printf("Input name sector matr1 \n");
-				scanf("%s",nameSect);
-				printf("Input name matrix matr1 \n");
-				scanf("%s",nameMatr);
-				printf("Input name size matr1 \n");
-				scanf("%s",nameSize);
-				i=TypeDataMatrix(nameSect,nameMatr,nameSize,MS,&a);
-				printf("%d \n",i);
-				printf("n=%d m=%d \n",a.N,a.M);
-				PrintMatr(a);
-    			printf("det= %f\n",DetMatr(a));
+				if(i=TypeDataMatrix("determinant","matrix","size",MS,&a)){
+					printf("Error %d \n",i);
+					break;
+				}
+				det=DetMatr(a);
+				if(fileOut){
+					fprintf(wpars,"\nИсходная матрица \n");
+					FileOutput(a,wpars);
+					fprintf(wpars,"\nDet=%f\n",det);
+				}
+				else{
+					printf("Исходная матрица \n");
+					PrintMatr(a);
+    				printf("det= %f\n",DetMatr(a));
+				}
     			FreeMatr(a);
 				break;
 			case 2:
-				printf("Multiply \n");
-    			
-				printf("Input name sector matr1 \n");
-				scanf("%s",nameSect);
-				printf("Input name matrix matr1 \n");
-				scanf("%s",nameMatr);
-				printf("Input name size matr1 \n");
-				scanf("%s",nameSize);
-				i=TypeDataMatrix(nameSect,nameMatr,nameSize,MS,&a);
-				printf("%d \n",i);
-				printf("n=%d m=%d \n",a.N,a.M);			
-				PrintMatr(a);
-
-				printf("Input name sector matr2 \n");
-				scanf("%s",nameSect);
-				printf("Input name matrix matr2 \n");
-				scanf("%s",nameMatr);
-				printf("Input name size matr2 \n");
-				scanf("%s",nameSize);
-				i=TypeDataMatrix(nameSect,nameMatr,nameSize,MS,&b);
-				printf("%d \n",i);
-				printf("n=%d m=%d \n",b.N,b.M);
-				PrintMatr(b);
-    			c=MultiplyMatr(a,b);
-				printf("n=%d m=%d \n",c.N,c.M);
-
-
-				PrintMatr(c);
-    			FreeMatr(a);
+				if(i=TypeDataMatrix("multiply","matrix1","size1",MS,&a)){
+					printf("Error %d \n",i);
+					break;
+				}
+				if(fileOut){
+					fprintf(wpars,"\nИсходная матрица 1\n");
+					FileOutput(a,wpars);
+				}
+				else{
+					printf("Исходная матрица 1\n");
+					PrintMatr(a);
+				}
+				if(i=TypeDataMatrix("multiply","matrix2","size2",MS,&b)){
+					printf("Error %d \n",i);
+					break;
+				}
+				if(fileOut){
+					fprintf(wpars,"\nИсходная матрица 2\n");
+					FileOutput(b,wpars);
+				}
+				else{
+					printf("Исходная матрица 2\n");
+					PrintMatr(b);
+				}
+				c=MultiplyMatr(a,b);
+				if(fileOut){
+					fprintf(wpars,"\nПроизведение матриц \n");
+					FileOutput(c,wpars);
+				}
+				else{
+					printf("Произведение матриц \n");
+					PrintMatr(c);
+				}
+				FreeMatr(a);
     			FreeMatr(b);
     			FreeMatr(c);
 				break;
 			case 3:
-				printf("Item3 \n");
+				printf("Multiply MPI \n");
 				break;
 			case 4:
-				printf("Item4 \n");
+				printf("Determinant MPI \n");
 				break;
-			case 5:
-				printf("Save progress in file \n");
-				break;
-
 		}
 	}
+	if(fileOut)
+		fclose(wpars);
 	FreeMemory(MS);
 	return 0;
 }

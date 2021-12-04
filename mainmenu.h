@@ -7,9 +7,9 @@ char * textmenu[]={
 	"0 - Exit",
 	"1 - Determinant", 
 	"2 - Multiply",
-	"3 - Item3",
-	"4 - Item4",
-	"5 - Item5"
+	"3 - Determinant MPI",
+	"4 - Multiply MPI",
+	"5 - Save progress (?)"
 };
 
 int N=sizeof(textmenu)/sizeof(textmenu[0]);
