@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef MATR_H
 #define MATR_H
 
@@ -8,6 +9,7 @@ struct Matr{
 };
 
 struct Matr InsertMatr();
-void FreeMatr(struct Matr a);
-void PrintMatr(struct Matr a);
+void FreeMatr(struct Matr);
+void PrintMatr(struct Matr);
+void FileOutput(struct Matr, FILE *);
 #endif
